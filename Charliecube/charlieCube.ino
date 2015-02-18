@@ -1,63 +1,67 @@
 /********************************** SIGNATURE *********************************\
-|                                      ,,                                      |
-|                     db             `7MM                                      |
-|                    ;MM:              MM                                      |
-|                   ,V^MM.    ,pP"Ybd  MMpMMMb.  .gP"Ya `7Mb,od8               |
-|                  ,M  `MM    8I   `"  MM    MM ,M'   Yb  MM' "'               |
-|                  AbmmmqMA   `YMMMa.  MM    MM 8M""""""  MM                   |
-|                 A'     VML  L.   I8  MM    MM YM.    ,  MM                   |
-|               .AMA.   .AMMA.M9mmmP'.JMML  JMML.`Mbmmd'.JMML.                 |
-|                                                                              |
-|                                                                              |
-|                                  ,,    ,,                                    |
-|                      .g8"""bgd `7MM    db        `7MM                        |
-|                    .dP'     `M   MM                MM                        |
-|                    dM'       `   MM  `7MM  ,p6"bo  MM  ,MP'                  |
-|                    MM            MM    MM 6M'  OO  MM ;Y                     |
-|                    MM.    `7MMF' MM    MM 8M       MM;Mm                     |
-|                    `Mb.     MM   MM    MM YM.    , MM `Mb.                   |
-|                      `"bmmmdPY .JMML..JMML.YMbmd'.JMML. YA.                  |
-|                                                                              |
-\******************************************************************************/
+ * |                                      ,,                                      |
+ * |                     db             `7MM                                      |
+ * |                    ;MM:              MM                                      |
+ * |                   ,V^MM.    ,pP"Ybd  MMpMMMb.  .gP"Ya `7Mb,od8               |
+ * |                  ,M  `MM    8I   `"  MM    MM ,M'   Yb  MM' "'               |
+ * |                  AbmmmqMA   `YMMMa.  MM    MM 8M""""""  MM                   |
+ * |                 A'     VML  L.   I8  MM    MM YM.    ,  MM                   |
+ * |               .AMA.   .AMMA.M9mmmP'.JMML  JMML.`Mbmmd'.JMML.                 |
+ * |                                                                              |
+ * |                                                                              |
+ * |                                  ,,    ,,                                    |
+ * |                      .g8"""bgd `7MM    db        `7MM                        |
+ * |                    .dP'     `M   MM                MM                        |
+ * |                    dM'       `   MM  `7MM  ,p6"bo  MM  ,MP'                  |
+ * |                    MM            MM    MM 6M'  OO  MM ;Y                     |
+ * |                    MM.    `7MMF' MM    MM 8M       MM;Mm                     |
+ * |                    `Mb.     MM   MM    MM YM.    , MM `Mb.                   |
+ * |                      `"bmmmdPY .JMML..JMML.YMbmd'.JMML. YA.                  |
+ * |                                                                              |
+ \******************************************************************************/
 /*********************************** LICENCE **********************************\
-| Copyright (c) 2012, Asher Glick                                              |
-| All rights reserved.                                                         |
-|                                                                              |
-| Redistribution and use in source and binary forms, with or without           |
-| modification, are permitted provided that the following conditions are met:  |
-|                                                                              |
-| * Redistributions of source code must retain the above copyright notice,     |
-|   this list of conditions and the following disclaimer.                      |
-| * Redistributions in binary form must reproduce the above copyright notice,  |
-|   this list of conditions and the following disclaimer in the documentation  |
-|   and/or other materials provided with the distribution.                     |
-|                                                                              |
-| THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"  |
-| AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE    |
-| IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE   |
-| ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE    |
-| LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR          |
-| CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF         |
-| SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS     |
-| INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN      |
-| CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)      |
-| ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE   |
-| POSSIBILITY OF SUCH DAMAGE.                                                  |
-\******************************************************************************/
+ * | Copyright (c) 2012, Asher Glick                                              |
+ * | All rights reserved.                                                         |
+ * |                                                                              |
+ * | Redistribution and use in source and binary forms, with or without           |
+ * | modification, are permitted provided that the following conditions are met:  |
+ * |                                                                              |
+ * | * Redistributions of source code must retain the above copyright notice,     |
+ * |   this list of conditions and the following disclaimer.                      |
+ * | * Redistributions in binary form must reproduce the above copyright notice,  |
+ * |   this list of conditions and the following disclaimer in the documentation  |
+ * |   and/or other materials provided with the distribution.                     |
+ * |                                                                              |
+ * | THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"  |
+ * | AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE    |
+ * | IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE   |
+ * | ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE    |
+ * | LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR          |
+ * | CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF         |
+ * | SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS     |
+ * | INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN      |
+ * | CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)      |
+ * | ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE   |
+ * | POSSIBILITY OF SUCH DAMAGE.                                                  |
+ \******************************************************************************/
 
 #include "cubeplex.h"
 
 int color = red;
 
-
 void setup() {
   initCube();
-  
+
   // Animation Max represents how many times the timer should trigger before
   // Progressing to the next animation
   setAnimationTime(2550);
+
+  Serial.begin(9600);
 }
+
 void loop() {
+  // walkTheLine();
+  pulsingCube();
   planarSpin();
   fountian();
   trifade();
@@ -65,15 +69,57 @@ void loop() {
   tunnel();
   //chaseTheDot();
   planarFlop3D();
-  
+
+}
+
+void walkTheLine() {
+  for (int z=1; z<5; z++) {
+    for (int x=0; x<4; x++) {
+      for (int y=0; y<4; y++) {
+        Serial.print("drawLed(red, ");
+        Serial.print(x);
+        Serial.print(", ");
+        Serial.print(y);
+        Serial.print(", ");
+        Serial.print(z);
+        Serial.println(")");
+
+        drawLed(red, x, y, z%4);
+        flushBuffer();
+        clearBuffer();
+
+        delay(150);
+      }
+    }
+  }
+}
+
+void pulsingCube() {
+  continuePattern = true;
+  int animationSpeed = 200;
+  while (continuePattern) {
+    for (int i = 0; i < 4; i++) {
+      drawHollowBox(color,0,0,0,i,i,i);
+      flushBuffer();
+      clearBuffer();
+      delay(animationSpeed);
+    }
+    for (int i = 0; i < 4; i++) {
+      drawHollowBox(color,i,i,i,3,3,3);
+      flushBuffer();
+      clearBuffer();
+      delay(animationSpeed);
+    }
+    color=nextColor(color);
+  }
 }
 
 /********************************* PLANAR SPIN ********************************\
-| A plane of light spins around the virtical center of the cube and changes    |
-| colors after a certian number of rotations                                   |
-|                                                                              |
-| Written By: Asher Glick                                                      |
-\******************************************************************************/
+ * | A plane of light spins around the virtical center of the cube and changes    |
+ * | colors after a certian number of rotations                                   |
+ * |                                                                              |
+ * | Written By: Asher Glick                                                      |
+ \******************************************************************************/
 void planarSpin() {
   continuePattern = true;
   int animationSpeed = 50;
@@ -106,12 +152,12 @@ void planarSpin() {
 }
 
 /********************************** FOUNTIAN **********************************\
-| Light shoots up the middle of the cube then once it reaches the top fall     |
-| back down on the outside of the cube. After it hits the bottom it changes    |
-| color and starts again                                                       |
-|                                                                              |
-| Written By: Asher Glick                                                      |
-\******************************************************************************/
+ * | Light shoots up the middle of the cube then once it reaches the top fall     |
+ * | back down on the outside of the cube. After it hits the bottom it changes    |
+ * | color and starts again                                                       |
+ * |                                                                              |
+ * | Written By: Asher Glick                                                      |
+ \******************************************************************************/
 void fountian() {
   continuePattern = true;
   int animationSpeed = 100;
@@ -133,11 +179,11 @@ void fountian() {
 }
 
 /********************************** TRI-FADE **********************************\
-| This animation fades through the red green and blue colors of the leds       |
-| creating different mixtures of each of the colors.                           |
-|                                                                              |
-| Written By: Asher Glick                                                      |
-\******************************************************************************/
+ * | This animation fades through the red green and blue colors of the leds       |
+ * | creating different mixtures of each of the colors.                           |
+ * |                                                                              |
+ * | Written By: Asher Glick                                                      |
+ \******************************************************************************/
 void trifade() {
   continuePattern = true;
   int animationSpeed = 20;
@@ -170,42 +216,60 @@ void trifade() {
 }
 
 /******************************** SHIFT SQUARES *******************************\
-| Three 2x2x2 squares start on the cube each a red green or blue. then they    |
-| randomly move around the cube one at a time, if they crash into each other   |
-| then then both leds turn on and while they occupy the same space they apear  |
-| a different color                                                            |
-|                                                                              |
-| Written By: Asher Glick                                                      |
-\******************************************************************************/
+ * | Three 2x2x2 squares start on the cube each a red green or blue. then they    |
+ * | randomly move around the cube one at a time, if they crash into each other   |
+ * | then then both leds turn on and while they occupy the same space they apear  |
+ * | a different color                                                            |
+ * |                                                                              |
+ * | Written By: Asher Glick                                                      |
+ \******************************************************************************/
 void shiftSquares() {
   int animationSpeed = 100;
-  
+
   int blx = 2; // blue x
   int bly = 0; // blue y
   int blz = 0; // blue z
-  
+
   int rdx = 0; // red x
   int rdy = 2; // red y
   int rdz = 0; // red z
-  
+
   int gnx = 0; // green x
   int gny = 0; // green y
   int gnz = 2; // green z
-  
+
   int * mover = &blx;
   continuePattern = true;
-  
+
   while(continuePattern) {
     switch (random(0,9)) {
-      case 0: mover = &blx; break;
-      case 1: mover = &bly; break;
-      case 2: mover = &blz; break;
-      case 3: mover = &rdx; break;
-      case 4: mover = &rdy; break;
-      case 5: mover = &rdz; break;
-      case 6: mover = &gnx; break;
-      case 7: mover = &gny; break;
-      case 8: mover = &gnz; break;
+    case 0: 
+      mover = &blx; 
+      break;
+    case 1: 
+      mover = &bly; 
+      break;
+    case 2: 
+      mover = &blz; 
+      break;
+    case 3: 
+      mover = &rdx; 
+      break;
+    case 4: 
+      mover = &rdy; 
+      break;
+    case 5: 
+      mover = &rdz; 
+      break;
+    case 6: 
+      mover = &gnx; 
+      break;
+    case 7: 
+      mover = &gny; 
+      break;
+    case 8: 
+      mover = &gnz; 
+      break;
     }
     *mover = (((*mover)+2)%4)-1;
     drawBox(blue ,abs(blx),abs(bly),abs(blz),abs(blx)+1,abs(bly)+1,abs(blz)+1);
@@ -225,19 +289,24 @@ void shiftSquares() {
 }
 
 /*********************************** TUNNEL ***********************************\
-|
-\******************************************************************************/
+ * |
+ \******************************************************************************/
 void tunnel() {
   continuePattern = true;
   int animationSpeed =100;
-  
-  int color1[]  = {R,R,R,R,B,B,B,B};
-  int bright1[] = {63,127,191,255,63,127,191,255};
-  int color2[]  = {B,B,B,B,R,R,R,R};
-  int bright2[] = {255,191,127,63,255,191,127,63};
-  
-  int index[]   = {0,1,2,3,4,5,6,7};
-  
+
+  int color1[]  = {
+    R,R,R,R,B,B,B,B      };
+  int bright1[] = {
+    63,127,191,255,63,127,191,255      };
+  int color2[]  = {
+    B,B,B,B,R,R,R,R      };
+  int bright2[] = {
+    255,191,127,63,255,191,127,63      };
+
+  int index[]   = {
+    0,1,2,3,4,5,6,7      };
+
   while (continuePattern) {
     drawBoxWalls(color1[index[0]],bright1[index[0]],1,1,0,2,2,0);
     drawBoxWalls(color2[index[0]],bright2[index[0]],1,1,0,2,2,0);
@@ -247,7 +316,7 @@ void tunnel() {
     drawBoxWalls(color2[index[2]],bright2[index[2]],1,1,2,2,2,2);
     drawBoxWalls(color1[index[3]],bright1[index[3]],1,1,3,2,2,3);
     drawBoxWalls(color2[index[3]],bright2[index[3]],1,1,3,2,2,3);
-    
+
     drawBoxWalls(color1[index[4]],bright1[index[4]],0,0,3,3,3,3);
     drawBoxWalls(color2[index[4]],bright2[index[4]],0,0,3,3,3,3);
     drawBoxWalls(color1[index[5]],bright1[index[5]],0,0,2,3,3,2);
@@ -256,8 +325,8 @@ void tunnel() {
     drawBoxWalls(color2[index[6]],bright2[index[6]],0,0,1,3,3,1);
     drawBoxWalls(color1[index[7]],bright1[index[7]],0,0,0,3,3,0);
     drawBoxWalls(color2[index[7]],bright2[index[7]],0,0,0,3,3,0);
-    
-    
+
+
     flushBuffer();
     clearBuffer();
     for (int i = 0; i < 8; i++){
@@ -265,49 +334,70 @@ void tunnel() {
       index[i] = (index[i]+1)%8;
     }
     delay(animationSpeed);
-    
+
   }
 }
 /******************************** CHASE THE DOT *******************************\
-| A single point of light moves around the cube randomly and changes colors    |
-| when it tries to go out of bounds                                            |
-|                                                                              |
-| Inspired By: Jonah Glick                                                     |
-| Written By: Asher Glick                                                      |
-\******************************************************************************/
+ * | A single point of light moves around the cube randomly and changes colors    |
+ * | when it tries to go out of bounds                                            |
+ * |                                                                              |
+ * | Inspired By: Jonah Glick                                                     |
+ * | Written By: Asher Glick                                                      |
+ \******************************************************************************/
 void chaseTheDot() {
   continuePattern = true;
   int animationSpeed = 100;
-  
+
   int xpos = 0;
   int ypos = 0;
   int zpos = 0;
-  
+
   while (continuePattern) {
     switch(random(0,6)) {
-      case 0:
-        if (xpos > 0) {xpos--;break;}
-        else color=nextColor(color);
-      case 1:
-        if (xpos < 3) {xpos++;break;}
-        else color=nextColor(color);
-        xpos--; break;
-        
-      case 2:
-        if (ypos > 0) {ypos--;break;}
-        else color=nextColor(color);
-      case 3:
-        if (ypos < 3) {ypos++;break;}
-        else color=nextColor(color);
-        ypos--; break;
-      
-      case 4:
-        if (zpos > 0) {zpos--;break;}
-        else color=nextColor(color);
-      case 5:
-        if (zpos < 3) {zpos++;break;}
-        else color=nextColor(color);
-        zpos--; break;
+    case 0:
+      if (xpos > 0) {
+        xpos--;
+        break;
+      }
+      else color=nextColor(color);
+    case 1:
+      if (xpos < 3) {
+        xpos++;
+        break;
+      }
+      else color=nextColor(color);
+      xpos--; 
+      break;
+
+    case 2:
+      if (ypos > 0) {
+        ypos--;
+        break;
+      }
+      else color=nextColor(color);
+    case 3:
+      if (ypos < 3) {
+        ypos++;
+        break;
+      }
+      else color=nextColor(color);
+      ypos--; 
+      break;
+
+    case 4:
+      if (zpos > 0) {
+        zpos--;
+        break;
+      }
+      else color=nextColor(color);
+    case 5:
+      if (zpos < 3) {
+        zpos++;
+        break;
+      }
+      else color=nextColor(color);
+      zpos--; 
+      break;
     }
     drawLed(color,xpos,ypos,zpos);
     flushBuffer();
@@ -316,17 +406,17 @@ void chaseTheDot() {
   }
 }
 /********************************* PLANAR FLOP ********************************\
-| 
-\******************************************************************************/
+ * | 
+ \******************************************************************************/
 /******************************* PLANAR FLOP 3D *******************************\
-| Version 2 of the planar flop, doing more complicated maths and 3D vectors    |
-| 'n stuff. Making this function found the bug of reversed z axis line drawing |
-\******************************************************************************/
+ * | Version 2 of the planar flop, doing more complicated maths and 3D vectors    |
+ * | 'n stuff. Making this function found the bug of reversed z axis line drawing |
+ \******************************************************************************/
 void planarFlop3D() {
   continuePattern = true;
   int animationSpeed = 50;
   while (continuePattern) {
-    
+
     for (int y = 3; y>0; y--){
       for (int z = 0; z < 4; z++) drawLine(color,0,3,z,3,y,z);
       flushBuffer();
@@ -339,8 +429,8 @@ void planarFlop3D() {
       clearBuffer();
       delay(animationSpeed);
     }
-    
-    
+
+
     for (int x = 0; x < 3; x++) {
       for (int y = 0; y < 4; y++) drawLine(color,0,y,0,x,y,3);
       flushBuffer();
@@ -353,7 +443,7 @@ void planarFlop3D() {
       clearBuffer();
       delay(animationSpeed);
     }
-    
+
     for (int z = 0; z < 3; z++) {
       for (int x = 0; x < 4; x++) drawLine(color,x,0,0,x,3,z);
       flushBuffer();
@@ -366,7 +456,7 @@ void planarFlop3D() {
       clearBuffer();
       delay(animationSpeed);
     }
-    
+
     for (int y = 0; y < 3; y++) {
       for (int z = 0; z < 4; z++) drawLine(color,3,0,z,0,y,z);
       flushBuffer();
@@ -379,7 +469,7 @@ void planarFlop3D() {
       clearBuffer();
       delay(animationSpeed);
     }
-    
+
     for (int x = 3; x > 0; x--) {
       for (int y = 0; y < 4; y++) drawLine(color,3,y,3,x,y,0);
       flushBuffer();
@@ -392,7 +482,7 @@ void planarFlop3D() {
       clearBuffer();
       delay(animationSpeed);
     }
-    
+
     for (int z = 3; z > 0; z--) {
       for (int x = 0; x < 4; x++) drawLine(color,x,3,3,x,0,z);
       flushBuffer();
@@ -408,3 +498,6 @@ void planarFlop3D() {
     color = nextColor(color);
   }
 }
+
+
+
